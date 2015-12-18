@@ -1,0 +1,175 @@
+<div id="popup-container" class="container-fluid">
+    <style type="text/css">
+        #popup-container {
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 100;
+        }
+        #popup {
+            background-color: #fff;
+            border: 1px solid #4f86f7;
+            border-radius: 3px;
+            padding: 0 0 32px;
+        }
+        #close {
+            margin: 5px 5px 5px 0;
+        }
+        .form-alert {
+            display: none;
+            margin-bottom: 0;
+            margin-top: 6px;
+            padding: 4px;
+        }
+    </style>
+    <div class="row">
+        <div id="popup" class="col-md-4 col-md-push-4">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button id="close" type="button" class="btn btn-default btn-xs btn-danger" aria-label="Close">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-center col-md-8 col-md-push-2">
+                    <form>
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon">
+                                Graph Name
+                            </span>
+                            <input id="graph-name" type="text" class="form-control" placeholder="Name" />
+                            <span class="input-group-btn">
+                                <button id="create" type="button" class="btn btn-default btn-sm" aria-label="Create">
+                                    Create
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div id="form-error" class="form-alert alert alert-danger text-center col-md-6 col-md-push-3">
+                    {# error container #}
+                </div>
+                <div id="form-info" class="form-alert alert alert-info text-center col-md-6 col-md-push-3">
+                    {# info container #}
+                </div>
+                <div id="form-success" class="form-alert alert alert-success text-center col-md-6 col-md-push-3">
+                    {# info container #}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function addErrorClass(element)
+        {
+            var parent = $(element).parent('.input-group');
+            parent.addClass('has-error');
+            parent.find('.btn-default').removeClass('btn-default').addClass('btn-danger');
+        }
+        function removeErrorClass(element)
+        {
+            var parent = $(element).parent('.input-group');
+            if (parent.hasClass('has-error')) {
+                parent.removeClass('has-error');
+                parent.find('.btn-danger').removeClass('btn-danger').addClass('btn-default');
+            }
+        }
+        function showContainer(errorMessage, type)
+        {
+            $('#form-' + type).css('display', 'block').html(errorMessage);
+        }
+        function hideContainer(type)
+        {
+            $('#form-' + type).css('display', 'none').html('');
+        }
+
+        $(document).ready(function () {
+            $('#graph-name').on('focus', function () {
+                removeErrorClass($(this));
+                hideContainer('error');
+            })
+            .on('change', function () {
+                removeErrorClass($(this));
+                hideContainer('error');
+            });
+
+            $('form').on('submit', function () {
+                $('#create').click();
+                return false;
+            });
+
+            $('#create').on('click', function () {
+                hideContainer('success');
+
+                var graphNameElement = $('#graph-name');
+                var graphName = graphNameElement.val();
+                if (graphName == '') {
+                    addErrorClass(graphNameElement);
+                    showContainer('Empty graph name!', 'error');
+                } else {
+                    if (/^[\w][\w\-\. ]*$/.test(graphName)) {
+                        removeErrorClass(graphNameElement);
+                        hideContainer('error');
+
+                        if ($('.form-alert.alert-info').css('display') == 'none') {
+                            showContainer('Try to create...', 'info');
+
+                            $.ajax({
+                                url: '/add-new',
+                                method: 'post',
+                                dataType: 'json',
+                                data: 'graph-name=' + graphName,
+                                success: function (data) {
+                                    hideContainer('info');
+
+                                    if (data.success == 1) {
+                                        showContainer('Added <em>' + graphName + '</em> graph!', 'success');
+                                        refreshList();
+                                    } else {
+                                        addErrorClass(graphNameElement);
+
+                                        if (data.wrongName == 1) {
+                                            showContainer('Wrong graph name!', 'error');
+                                        } else {
+                                            if (data.emptyName == 1) {
+                                                showContainer('Empty graph name!', 'error');
+                                            } else {
+                                                if (data.graphExists == 1) {
+                                                    showContainer('Graph with this name current exists!', 'error');
+                                                } else {
+                                                    showContainer('Unknown error.', 'error');
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                error: function () {
+                                    hideContainer('info');
+                                    addErrorClass(graphNameElement);
+                                    showContainer('Unknown error.', 'error');
+                                }
+                            });
+                        }
+                    } else {
+                        addErrorClass(graphNameElement);
+                        showContainer('Wrong graph name!', 'error');
+                    }
+                }
+                return false;
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#popup-container').css('top', ($(window).height() - $('#popup-container').height()) / 2);
+
+            $('#close').on('click', function () {
+                $('#popup-container').remove();
+
+                return false;
+            });
+        });
+    </script>
+</div>
