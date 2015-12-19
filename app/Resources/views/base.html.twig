@@ -86,7 +86,7 @@
             }
 
             $(document).ready(function () {
-                $('#add-new').on('click', function () {
+                $(document).on('click', '#add-new', function () {
                     if ($('#popup-container').length == 0) {
                         $.ajax({
                             url: '/create-new',
