@@ -3,5 +3,83 @@
 {% block title %}Welcome{% endblock %}
 
 {% block body %}
-    Test
+    <div id="choose-graph" class="row">
+        <div class="col-md-12">
+            Choose graph
+        </div>
+    </div>
+    <div id="graph-designer" class="row">
+        <div id="canvas-area" class="col-md-12">
+            {# canvas area #}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+    #choose-graph, #graph-designer {
+        display: none;
+    }
+    #graph-designer > :first-child {
+        border: 1px solid #000;
+    }
+    #canvas-area {
+        padding: 0;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="javascript/kinetic-v5.1.0.min.js"></script>
+
+    <script type="text/javascript">
+        function loadGraphsData(stage)
+        {
+            var points = [
+                { id: 5, x: 0, y: 0 },
+                { id: 1, x: 100, y: 100 },
+                { id: 18, x: 15, y: 15 }
+            ];
+
+            var baseLayer = new Kinetic.Layer();
+            stage.add(baseLayer);
+
+            var pointsLayer = new Kinetic.Layer();
+
+            var circle;
+            for (var a = 0, b = points.length; a < b; a++) {
+                circle = new Kinetic.Circle({
+                    radius: 2,
+                    x: points[a].x,
+                    y: points[a].y,
+                    fill: 'red'
+                });
+                console.log('Add point at ' + points[a].x + ' x ' + points[a].y);
+                pointsLayer.add(circle);
+            }
+
+            stage.add(pointsLayer)
+                 .draw();
+        }
+
+        function createCircle()
+        {
+            var Container = new Kinetic.Container();
+        }
+
+        $(document).ready(function () {
+            if ($('#graphs-list .list-group-item.active').length == 0) {
+                $('#choose-graph').css('display', 'block');
+            } else {
+                $('#graph-designer').css('display', 'block');
+            }
+
+            var stage = new Kinetic.Stage({
+                container: 'canvas-area',
+                height: 100,
+                width: 100
+            });
+            loadGraphsData(stage);
+        });
+    </script>
 {% endblock %}
