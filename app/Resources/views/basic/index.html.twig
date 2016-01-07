@@ -75,7 +75,13 @@
 
         function changeAction(toAction)
         {
+            $('body').removeClass(_Action);
+
             _Action = toAction;
+
+            if (toAction != 'none') {
+                $('body').attr('class', _Action);
+            }
         }
 
         $(document).ready(function () {
@@ -94,6 +100,11 @@
 
             $('div#buttons div.btn-group div').on('click', function () {
                 changeAction($(this).attr('id'));
+            });
+
+            $('div#canvas-area').on('contextmenu', function () {
+                changeAction('none');
+                return false;
             });
         });
     </script>
