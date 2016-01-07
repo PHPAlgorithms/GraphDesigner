@@ -105,14 +105,14 @@
                     return false;
                 });
 
-                $(document).on('dblclick', '#graphs-list .list-group-item:not(.active)', function () {
+                $(document).on('click', '#graphs-list .list-group-item:not(.active)', function () {
                     $('#graphs-list .list-group-item.active').removeClass('active');
                     $(this).addClass('active');
 
                     $('#choose-graph').css('display', 'none');
                     $('#graph-designer').css('display', 'block');
                 })
-                .on('dblclick', '#graphs-list .list-group-item.active', function () {
+                .on('click', '#graphs-list .list-group-item.active', function () {
                     $(this).removeClass('active');
 
                     $('#choose-graph').css('display', 'block');
