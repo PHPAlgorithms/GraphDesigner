@@ -3,13 +3,19 @@
 {% block title %}Welcome{% endblock %}
 
 {% block body %}
-    <div id="choose-graph" class="row">
+    <div class="row" id="choose-graph">
         <div class="col-md-12">
             Choose graph
         </div>
     </div>
-    <div id="graph-designer" class="row">
-        <div id="canvas-area" class="col-md-12">
+    <div class="row" id="graph-designer">
+        <div class="col-md-12" id="buttons">
+            <div class="btn-group" role="group" aria-label="Modify Your Graph">
+                <div class="btn btn-success" id="Add">Add Point</div>
+                <div class="btn btn-danger" id="Remove">Remove Point</div>
+            </div>
+        </div>
+        <div class="col-md-12" id="canvas-area">
             {# canvas area #}
         </div>
     </div>
@@ -20,10 +26,11 @@
     #choose-graph, #graph-designer {
         display: none;
     }
-    #graph-designer > :first-child {
-        border: 1px solid #000;
+    #graph-designer #buttons {
+        margin-bottom: 5px;
     }
-    #canvas-area {
+    #graph-designer #canvas-area {
+        border: 1px solid #000;
         padding: 0;
     }
 </style>
@@ -33,38 +40,42 @@
     <script type="text/javascript" src="javascript/kinetic-v5.1.0.min.js"></script>
 
     <script type="text/javascript">
-        function loadGraphsData(stage)
-        {
-            var points = [
-                { id: 5, x: 0, y: 0 },
-                { id: 1, x: 100, y: 100 },
-                { id: 18, x: 15, y: 15 }
-            ];
+        var _Action = 'none';
+        var _Stage;
 
+        var _Points = new Array();
+        var _Labels = new Array();
+
+        function loadGraphsData()
+        {
             var baseLayer = new Kinetic.Layer();
-            stage.add(baseLayer);
+            _Stage.add(baseLayer);
 
             var pointsLayer = new Kinetic.Layer();
 
             var circle;
-            for (var a = 0, b = points.length; a < b; a++) {
+            for (var a = 0, b = _Points.length; a < b; a++) {
                 circle = new Kinetic.Circle({
                     radius: 2,
-                    x: points[a].x,
-                    y: points[a].y,
+                    x: _Points[a].x,
+                    y: _Points[a].y,
                     fill: 'red'
                 });
-                console.log('Add point at ' + points[a].x + ' x ' + points[a].y);
                 pointsLayer.add(circle);
             }
 
-            stage.add(pointsLayer)
-                 .draw();
+            _Stage.add(pointsLayer)
+                  .draw();
         }
 
         function createCircle()
         {
             var Container = new Kinetic.Container();
+        }
+
+        function changeAction(toAction)
+        {
+            _Action = toAction;
         }
 
         $(document).ready(function () {
@@ -74,12 +85,16 @@
                 $('#graph-designer').css('display', 'block');
             }
 
-            var stage = new Kinetic.Stage({
+            _Stage = new Kinetic.Stage({
                 container: 'canvas-area',
                 height: 100,
                 width: 100
             });
-            loadGraphsData(stage);
+            loadGraphsData();
+
+            $('div#buttons div.btn-group div').on('click', function () {
+                changeAction($(this).attr('id'));
+            });
         });
     </script>
 {% endblock %}
