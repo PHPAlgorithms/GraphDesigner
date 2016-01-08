@@ -40,11 +40,46 @@
     <script type="text/javascript" src="javascript/kinetic-v5.1.0.min.js"></script>
 
     <script type="text/javascript">
-        var _Action = 'none';
-        var _Stage;
+        var _Action = new function () {
+            this.current = 'none'
+            this.availableActions = new Array('none', 'add', 'remove');
+            this.change = function (action) {
+                if (this.availableActions.indexOf(action) != -1) {
+                    if (action != 'none') {
+                        $('body').removeClass(this.current)
+                                 .addClass(action);
+                    }
 
-        var _Points = new Array();
-        var _Labels = new Array();
+                    this.current = action;
+                } else {
+                    throw 'Action not exists!';
+                }
+            };
+        };
+        var _Stage;
+        var _Points = new function (points) {
+            this.points = new Array();
+            this.pointsCount = 0;
+            this.getPoint = function(n) {
+                if (this.pointsCount == 0) {
+                    throw 'Points array is clear!';
+                } else {
+                    if ((n < this.pointsCount) && (n >= 0)) {
+                        return this.points[n];
+                    } else {
+                        throw 'Point not exists!';
+                    }
+                }
+            }
+            this.eachOne = function (func) {
+                if (this.pointsCount > 0) {
+                    for (var a = 0; a < this.pointsCount; a++) {
+                        func(this.points[a]);
+                    }
+                }
+            }
+        };
+        //var _Labels = new Array();
 
         function loadGraphsData()
         {
@@ -53,16 +88,9 @@
 
             var pointsLayer = new Kinetic.Layer();
 
-            var circle;
-            for (var a = 0, b = _Points.length; a < b; a++) {
-                circle = new Kinetic.Circle({
-                    radius: 2,
-                    x: _Points[a].x,
-                    y: _Points[a].y,
-                    fill: 'red'
-                });
-                pointsLayer.add(circle);
-            }
+            _Points.eachOne(function (point) {
+                pointsLayer.add(_Points[a]);
+            });
 
             _Stage.add(pointsLayer)
                   .draw();
@@ -70,18 +98,7 @@
 
         function createCircle()
         {
-            var Container = new Kinetic.Container();
-        }
-
-        function changeAction(toAction)
-        {
-            $('body').removeClass(_Action);
-
-            _Action = toAction;
-
-            if (toAction != 'none') {
-                $('body').attr('class', _Action);
-            }
+            
         }
 
         $(document).ready(function () {
@@ -99,11 +116,11 @@
             loadGraphsData();
 
             $('div#buttons div.btn-group div').on('click', function () {
-                changeAction($(this).attr('id'));
+                _Action.change($(this).attr('id'));
             });
 
             $('div#canvas-area').on('contextmenu', function () {
-                changeAction('none');
+                _Action.change('none');
                 return false;
             });
         });
