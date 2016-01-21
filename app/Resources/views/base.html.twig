@@ -109,6 +109,8 @@
                     $('#graphs-list .list-group-item.active').removeClass('active');
                     $(this).addClass('active');
 
+                    _Stage.reload($('#graphs-list .list-group .active').text());
+
                     $('#choose-graph').css('display', 'none');
                     $('#graph-designer').css('display', 'block');
                 })

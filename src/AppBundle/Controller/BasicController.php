@@ -16,7 +16,7 @@ class BasicController extends Controller
     private function getSavedGraphs()
     {
         $savedGraphsPath = $this->container
-                                ->getParameter('kernel.root_dir') . '\Resources\saved-graphs';
+                                ->getParameter('kernel.root_dir') . '\\Resources\\saved-graphs';
 
         $fs = new Filesystem();
         if (!$fs->exists($savedGraphsPath)) {

@@ -43,10 +43,6 @@ var _Stage = new function () {
 
             var pointsLayer = new Kinetic.Layer();
 
-            _Points.eachOne(function (point) {
-                pointsLayer.add(_Points[a]);
-            });
-
             this.stage
                 .add(pointsLayer)
                 .draw();
@@ -61,6 +57,23 @@ var _Stage = new function () {
     this.refreshPointsLayer = function () {
         this.getPointsLayer()
             .draw();
+    };
+    this.clear = function () {
+        if (typeof this.stage != 'undefined') {
+            this.getPointsLayer()
+                .removeChildren();
+            _Points.clear();
+        }
+    };
+    this.reload = function (graphName) {
+        this.clear();
+
+        var pointsLayer = this.getPointsLayer();
+
+        _Points.loadGraph(graphName);
+        _Points.eachOne(function (point) {
+            pointsLayer.add(_Points[a]);
+        });
     };
     this.add = function (element) {
         return this.stage
@@ -105,6 +118,13 @@ var _Points = new function (points) {
         } else {
             return true;
         }
+    };
+    this.clear = function () {
+        if (typeof this.points != 'undefined') {
+            delete this.points;
+            this.points = new Array();
+        }
+        this.count = 0;
     };
     this.add = function (x, y) {
         if (this.check(x, y)) {
@@ -167,5 +187,20 @@ var _Points = new function (points) {
                               .getY();
         }
         return saveString;
+    };
+    this.loadGraph = function (name) {
+        $.ajax({
+            data: 'graphName=' + name,
+            dataType: 'json',
+            method: 'post',
+            url: '/load-graph',
+            success: function (data) {
+                if (data.success) {
+                    for (var a = 0; a < data.count; a++) {
+                        _Points.add(data.points[a].x, data.points[a].y);
+                    }
+                }
+            }
+        });
     };
 };
