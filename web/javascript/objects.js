@@ -1,10 +1,10 @@
 var _Action = new function () {
+    var availableActions = new Array('none', 'addpoint', 'removepoint');
     this.current = 'none'
-    this.availableActions = new Array('none', 'addpoint', 'removepoint');
     this.change = function (action) {
         action = action.toLowerCase();
 
-        if (this.availableActions.indexOf(action) != -1) {
+        if (availableActions.indexOf(action) != -1) {
             var body = $('body');
 
             body.removeClass(this.current);
@@ -152,5 +152,20 @@ var _Points = new function (points) {
                 }
             }
         }
+    };
+    this.toSave = function () {
+        var saveString = '';
+        for (var a = 0; a < this.count; a++) {
+            if (saveString != '') {
+                saveString += ',';
+            }
+
+            saveString += this.points[a]
+                              .getX() +
+                          ':' +
+                          this.points[a]
+                              .getY();
+        }
+        return saveString;
     };
 };

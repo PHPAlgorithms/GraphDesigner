@@ -15,7 +15,8 @@ class BasicController extends Controller
 {
     private function getSavedGraphs()
     {
-        $savedGraphsPath = $this->container->getParameter('kernel.root_dir').'\Resources\saved-graphs';
+        $savedGraphsPath = $this->container
+                                ->getParameter('kernel.root_dir') . '\Resources\saved-graphs';
 
         $fs = new Filesystem();
         if (!$fs->exists($savedGraphsPath)) {
@@ -66,29 +67,30 @@ class BasicController extends Controller
         $graphName = $request->get('graph-name');
 
         if (preg_match('/^[\w][\w\-\. ]*$/', $graphName)) {
-            $graphPath = $this->container->getParameter('kernel.root_dir')."\\Resources\\saved-graphs\\{$graphName}.grph";
+            $graphPath = $this->container
+                              ->getParameter('kernel.root_dir') . "\\Resources\\saved-graphs\\{$graphName}.grph";
 
             $fs = new Filesystem();
             if ($fs->exists($graphPath)) {
-                return new JsonResponse(array(
+                return new JsonResponse([
                     'graphExists' => 1,
                     'success' => 0,
-                ));
+                ]);
             } else {
                 $fs->touch($graphPath);
 
-                return new JsonResponse(array(
+                return new JsonResponse([
                     'success' => 1,
-                ));
+                ]);
             }
         } else {
             $emptyName = empty($graphName);
 
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'emptyName' => $emptyName,
                 'success' => 0,
                 'wrongName' => !$emptyName,
-            ));
+            ]);
         }
     }
 
@@ -99,14 +101,14 @@ class BasicController extends Controller
     public function refreshListAction(Request $request)
     {
         try {
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'savedGraphs' => $this->getSavedGraphs(),
                 'success' => 1,
-            ));
+            ]);
         } catch (Exception $e) {
-            return new JsonResponse(array(
+            return new JsonResponse([
                 'success' => 0,
-            ));
+            ]);
         }
     }
 }

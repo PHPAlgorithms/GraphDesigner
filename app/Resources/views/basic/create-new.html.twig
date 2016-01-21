@@ -13,7 +13,7 @@
             border-radius: 3px;
             padding: 0 0 32px;
         }
-        #close {
+        #popup-close {
             margin: 5px 5px 5px 0;
         }
         .form-alert {
@@ -27,7 +27,7 @@
         <div id="popup" class="col-md-4 col-md-push-4">
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button id="close" type="button" class="btn btn-default btn-xs btn-danger" aria-label="Close">
+                    <button id="popup-close" type="button" class="btn btn-default btn-xs btn-danger" aria-label="Close">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </div>
@@ -56,7 +56,7 @@
                     {# info container #}
                 </div>
                 <div id="form-success" class="form-alert alert alert-success text-center col-md-6 col-md-push-3">
-                    {# info container #}
+                    {# success container #}
                 </div>
             </div>
         </div>
@@ -76,23 +76,39 @@
                 parent.find('.btn-danger').removeClass('btn-danger').addClass('btn-default');
             }
         }
-        function showContainer(errorMessage, type)
-        {
-            $('#form-' + type).css('display', 'block').html(errorMessage);
-        }
-        function hideContainer(type)
-        {
-            $('#form-' + type).css('display', 'none').html('');
-        }
+        var _Container = new function () {
+            var availableTypes = new Array('error', 'info', 'success');
+            function checkType(type) {
+                if (availableTypes.indexOf(type.toLowerCase()) != -1) {
+                    return true;
+                } else {
+                    throw 'Unknown type!';
+                }
+            }
+            this.show = function (message, type) {
+                type = type.toLowerCase();
+                if (checkType(type)) {
+                    $('#form-' + type).css('display', 'block')
+                                  .html(message);
+                }
+            };
+            this.hide = function (type) {
+                type = type.toLowerCase();
+                if (checkType(type)) {
+                    $('#form-' + type).css('display', 'none')
+                                      .html('');
+                }
+            };
+        };
 
         $(document).ready(function () {
             $('#graph-name').on('focus', function () {
                 removeErrorClass($(this));
-                hideContainer('error');
+                _Container.hide('error');
             })
             .on('change', function () {
                 removeErrorClass($(this));
-                hideContainer('error');
+                _Container.hide('error');
             });
 
             $('form').on('submit', function () {
@@ -101,20 +117,20 @@
             });
 
             $('#create').on('click', function () {
-                hideContainer('success');
+                _Container.hide('success');
 
                 var graphNameElement = $('#graph-name');
                 var graphName = graphNameElement.val();
                 if (graphName == '') {
                     addErrorClass(graphNameElement);
-                    showContainer('Empty graph name!', 'error');
+                    _Container.show('Empty graph name!', 'error');
                 } else {
                     if (/^[\w][\w\-\. ]*$/.test(graphName)) {
                         removeErrorClass(graphNameElement);
-                        hideContainer('error');
+                        _Container.hide('error');
 
                         if ($('.form-alert.alert-info').css('display') == 'none') {
-                            showContainer('Try to create...', 'info');
+                            _Container.show('Try to create...', 'info');
 
                             $.ajax({
                                 url: '/add-new',
@@ -122,39 +138,41 @@
                                 dataType: 'json',
                                 data: 'graph-name=' + graphName,
                                 success: function (data) {
-                                    hideContainer('info');
+                                    _Container.hide('info');
 
                                     if (data.success == 1) {
-                                        showContainer('Added <em>' + graphName + '</em> graph!', 'success');
+                                        _Container.show('Added <em>' + graphName + '</em> graph!', 'success');
                                         refreshList();
+
+                                        setTimeout(function () {
+                                            $('#popup-container').animate({ 'opacity': 0 }, 500, function () {
+                                                $(this).remove();
+                                            });
+                                        }, 1500);
                                     } else {
                                         addErrorClass(graphNameElement);
 
                                         if (data.wrongName == 1) {
-                                            showContainer('Wrong graph name!', 'error');
+                                            _Container.show('Wrong graph name!', 'error');
+                                        } else if (data.emptyName == 1) {
+                                            _Container.show('Empty graph name!', 'error');
+                                        } else if (data.graphExists == 1) {
+                                            _Container.show('Graph with this name current exists!', 'error');
                                         } else {
-                                            if (data.emptyName == 1) {
-                                                showContainer('Empty graph name!', 'error');
-                                            } else {
-                                                if (data.graphExists == 1) {
-                                                    showContainer('Graph with this name current exists!', 'error');
-                                                } else {
-                                                    showContainer('Unknown error.', 'error');
-                                                }
-                                            }
+                                            _Container.show('Unknown error.', 'error');
                                         }
                                     }
                                 },
                                 error: function () {
-                                    hideContainer('info');
+                                    _Container.hide('info');
                                     addErrorClass(graphNameElement);
-                                    showContainer('Unknown error.', 'error');
+                                    _Container.show('Unknown error.', 'error');
                                 }
                             });
                         }
                     } else {
                         addErrorClass(graphNameElement);
-                        showContainer('Wrong graph name!', 'error');
+                        _Container.show('Wrong graph name!', 'error');
                     }
                 }
                 return false;
@@ -165,7 +183,7 @@
         $(document).ready(function () {
             $('#popup-container').css('top', ($(window).height() - $('#popup-container').height()) / 2);
 
-            $('#close').on('click', function () {
+            $('#popup-container #popup-close').on('click', function () {
                 $('#popup-container').remove();
 
                 return false;

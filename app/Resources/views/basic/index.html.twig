@@ -20,6 +20,7 @@
                 <div class="btn btn-danger btn-xs" id="RemoveConnection">Remove</div>
                 <div class="btn btn-default btn-xs">Connection</div>
             </div>
+            <div class="btn btn-warning btn-xs" id="Save-Graph">Save</div>
         </div>
         <div class="col-md-12" id="canvas-area">
             {# canvas area #}
@@ -34,6 +35,10 @@
     }
     #graph-designer #buttons {
         margin-bottom: 5px;
+        padding: 0;
+    }
+    #graph-designer #Save-Graph {
+        float: right;
     }
     #graph-designer #canvas-area {
         border: 1px solid #000;
@@ -69,6 +74,18 @@
                 if (_Action.currentIs('addpoint')) {
                     _Points.add(event.offsetX, event.offsetY);
                 }
+            });
+
+            $('div#buttons div.btn#Save-Graph').on('click', function () {
+                $.ajax({
+                    data: 'points=' + _Points.toSave() + '&graphName=' + $('#graphs-list .list-group .active').text(),
+                    dataType: 'json',
+                    url: '/save-graph',
+                    method: 'POST',
+                    success: function (data) {
+                        
+                    }
+                });
             });
         });
     </script>
