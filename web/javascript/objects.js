@@ -75,23 +75,30 @@ var _Stage = new function () {
     this.clear = function () {
         if (typeof this.stage != 'undefined') {
             this.getConnectionsLayer()
-                .removeChildren();
+                .removeChildren()
+                .draw();
             _Connections.clear();
 
             this.getPointsLayer()
-                .removeChildren();
+                .removeChildren()
+                .draw();
             _Points.clear();
         }
     };
     this.reload = function (graphName) {
-        this.clear();
+        if (graphName == '') {
+            throw 'Graph name is empty!';
+        } else {
+            this.clear();
 
-        var pointsLayer = this.getPointsLayer();
+            var pointsLayer = this.getPointsLayer();
 
-        _Points.loadGraph(graphName);
-        _Points.eachOne(function (point) {
-            pointsLayer.add(_Points[a]);
-        });
+            _Points.loadGraph(graphName);
+            _Points.eachOne(function (point) {
+                pointsLayer.add(_Points[a]);
+            });
+            pointsLayer.draw();
+        }
     };
     this.add = function (element) {
         return this.stage
@@ -270,14 +277,16 @@ var _Connections = new function () {
         }
     };
     this.clear = function () {
-        
+        if (typeof this.connections != 'undefined') {
+            delete this.connections;
+            this.connections = new Array();
+        }
     };
 };
 
 var _Connection = new function () {
     this.ends = new Array(-1, -1);
     this.add = function (id) {
-        console.log(id);
         if (this.ends[0] == -1) {
             this.ends[0] = id;
         } else {
