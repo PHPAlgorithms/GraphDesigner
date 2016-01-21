@@ -1,21 +1,23 @@
 var _Action = new function () {
-    var availableActions = new Array('none', 'addpoint', 'removepoint');
+    var availableActions = new Array('none', 'addpoint', 'removepoint', 'addconnection');
     this.current = 'none'
     this.change = function (action) {
-        action = action.toLowerCase();
+        if (typeof action != 'undefined') {
+            action = action.toLowerCase();
 
-        if (availableActions.indexOf(action) != -1) {
-            var body = $('body');
+            if (availableActions.indexOf(action) != -1) {
+                var body = $('body');
 
-            body.removeClass(this.current);
-            if (action != 'none') {
-                body.addClass(action);                        
+                body.removeClass(this.current);
+                if (action != 'none') {
+                    body.addClass(action);                        
+                }
+
+                this.current = action;
+            } else {
+                _Action.toDefault();
+                throw 'Action not exists!';
             }
-
-            this.current = action;
-        } else {
-            _Action.toDefault();
-            throw 'Action not exists!';
         }
     };
     this.toDefault = function () {
@@ -23,6 +25,9 @@ var _Action = new function () {
     };
     this.currentIs = function (action) {
         return (this.current == action.toLowerCase());
+    };
+    this.getCurrent = function () {
+        return this.current;
     };
 };
 
@@ -38,21 +43,30 @@ var _Stage = new function () {
 
             var baseLayer = new Kinetic.Layer();
 
-            this.stage
-                .add(baseLayer);
+            var connectionsLayer = new Kinetic.Layer();
 
             var pointsLayer = new Kinetic.Layer();
 
             this.stage
+                .add(baseLayer)
+                .add(connectionsLayer)
                 .add(pointsLayer)
                 .draw();
         } else {
             throw 'Stage exists!';
         }
     };
-    this.getPointsLayer = function () {
+    this.getConnectionsLayer = function () {
         return this.stage
                    .children[1];
+    };
+    this.refreshConnectionsLayer = function () {
+        this.getConnectionsLayer()
+            .draw();
+    };
+    this.getPointsLayer = function () {
+        return this.stage
+                   .children[2];
     };
     this.refreshPointsLayer = function () {
         this.getPointsLayer()
@@ -60,6 +74,10 @@ var _Stage = new function () {
     };
     this.clear = function () {
         if (typeof this.stage != 'undefined') {
+            this.getConnectionsLayer()
+                .removeChildren();
+            _Connections.clear();
+
             this.getPointsLayer()
                 .removeChildren();
             _Points.clear();
@@ -87,12 +105,11 @@ var _Stage = new function () {
 
 var _Points = new function (points) {
     this.points = new Array();
-    this.count = 0;
     this.getPoint = function(n) {
-        if (this.count == 0) {
+        if (this.points.length == 0) {
             throw 'Points array is clear!';
         } else {
-            if ((n < this.count) && (n >= 0)) {
+            if ((n < this.points.length) && (n >= 0)) {
                 return this.points[n];
             } else {
                 throw 'Point not exists!';
@@ -100,15 +117,15 @@ var _Points = new function (points) {
         }
     };
     this.eachOne = function (func) {
-        if (this.count > 0) {
-            for (var a = 0; a < this.count; a++) {
+        if (this.points.length > 0) {
+            for (var a = 0; a < this.points.length; a++) {
                 func(this.points[a]);
             }
         }
     };
     this.check = function (x, y) {
-        if (this.count > 0) {
-            for (var a = 0; a < this.count; a++) {
+        if (this.points.length > 0) {
+            for (var a = 0; a < this.points.length; a++) {
                 if ((this.points[a].getX() == x) && (this.points[a].getY() == y)) {
                     return false;
                 }
@@ -124,7 +141,6 @@ var _Points = new function (points) {
             delete this.points;
             this.points = new Array();
         }
-        this.count = 0;
     };
     this.add = function (x, y) {
         if (this.check(x, y)) {
@@ -138,18 +154,23 @@ var _Points = new function (points) {
             });
 
             point.on('click', function () {
-                if (_Action.currentIs('removepoint')) {
-                    _Points.remove(this.getX(), this.getY());
+                switch (_Action.getCurrent()) {
+                    case 'removepoint':
+                        _Points.remove(this.getX(), this.getY());
 
-                    this.remove();
+                        this.remove();
 
-                    _Stage.refreshPointsLayer();
+                        _Stage.refreshPointsLayer();
+                        break;
+                    case 'addconnection':
+                        _Connection.add(_Points.points
+                                               .indexOf(this));
+                        break;
                 }
             });
 
             this.points
                 .push(point);
-            this.count++;
 
             _Stage.getPointsLayer()
                   .add(point)
@@ -159,8 +180,8 @@ var _Points = new function (points) {
         }
     };
     this.remove = function (x, y) {
-        if (this.count > 0) {
-            for (var a = 0; a < this.count; a++) {
+        if (this.points.length > 0) {
+            for (var a = 0; a < this.points.length; a++) {
                 if ((this.points[a].getX() == x) && (this.points[a].getY() == y)) {
                     delete this.points[a];
 
@@ -175,7 +196,7 @@ var _Points = new function (points) {
     };
     this.toSave = function () {
         var saveString = '';
-        for (var a = 0; a < this.count; a++) {
+        for (var a = 0; a < this.points.length; a++) {
             if (saveString != '') {
                 saveString += ',';
             }
@@ -202,5 +223,79 @@ var _Points = new function (points) {
                 }
             }
         });
+    };
+    this.getID = function (x, y) {
+        if (this.points.length > 0) {
+            for (var a = 0; a < this.points.length; a++) {
+                if ((this.points[a].getX() == x) && (this.points[a].getY() == y)) {
+                    return a;
+                }
+            }
+
+            return -1;
+        } else {
+            return -1;
+        }
+    };
+};
+
+var _Connections = new function () {
+    this.connections = new Array();
+    this.add = function (connection) {
+        _Action.toDefault();
+
+        try {
+            if ((connection.getEnd(0) != -1) && (connection.getEnd(1) != -1) && (connection.getEnd(0) != connection.getEnd(1))) {
+                var first = _Points.getPoint(connection.getEnd(0)),
+                    second = _Points.getPoint(connection.getEnd(1));
+
+                var line = new Kinetic.Line({
+                    points: [first.getX(), first.getY(), second.getX(), second.getY()],
+                    stroke: '#000',
+                    strokeWidth: 1.2
+                });
+
+                this.connections
+                    .push(line);
+
+                _Stage.getConnectionsLayer()
+                      .add(line)
+                      .draw();
+            }
+
+            _Connection.clear();
+        } catch (e) {
+            _Connection.clear();
+            throw 'Wrong connection object!';
+        }
+    };
+    this.clear = function () {
+        
+    };
+};
+
+var _Connection = new function () {
+    this.ends = new Array(-1, -1);
+    this.add = function (id) {
+        console.log(id);
+        if (this.ends[0] == -1) {
+            this.ends[0] = id;
+        } else {
+            _Action.toDefault();
+
+            if (id == this.ends[0]) {
+                this.clear();
+            } else {
+                this.ends[1] = id;
+                _Connections.add(this);
+            }
+        }
+    };
+    this.clear = function () {
+        this.ends[0] = this.ends[1]
+                     = -1;
+    };
+    this.getEnd = function (n) {
+        return this.ends[n];
     };
 };
