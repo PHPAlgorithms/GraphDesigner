@@ -279,7 +279,6 @@ var _Connections = new function () {
                 line.idxs = new Array(connection.getEnd(0), connection.getEnd(1));
 
                 line.on('click', function () {
-                    console.log('try to delete line');
                     if (_Action.getCurrent() == 'removeconnection') {
                         _Connections.remove(this.idxs);
 
