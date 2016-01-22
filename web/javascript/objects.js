@@ -33,6 +33,7 @@ var _Action = new function () {
 };
 
 var _Stage = new function () {
+    loading = false;
     this.stage = undefined;
     this.create = function () {
         if (typeof this.stage == 'undefined') {
@@ -90,15 +91,27 @@ var _Stage = new function () {
         if (graphName == '') {
             throw 'Graph name is empty!';
         } else {
-            this.clear();
+            if (!loading) {
+                loading = true;
 
-            var pointsLayer = this.getPointsLayer();
+                $('body').append('<img id="loader-image" src="/images/loader.gif" />');
 
-            this.loadGraph(graphName);
-            _Points.eachOne(function (point) {
-                pointsLayer.add(_Points[a]);
-            });
-            pointsLayer.draw();
+                this.clear();
+
+                var pointsLayer = this.getPointsLayer();
+
+                this.loadGraph(graphName);
+                _Points.eachOne(function (point) {
+                    pointsLayer.add(_Points[a]);
+                });
+                pointsLayer.draw();
+
+                $('img#loader-image').animate({ opacity: 0 }, 400, function () {
+                    $(this).remove();
+                });
+
+                loading = false;
+            }
         }
     };
     this.loadGraph = function (name) {
@@ -225,8 +238,7 @@ var _Points = new function (points) {
                     }
                 }
 
-                _Stage.getConnectionsLayer()
-                      .draw();
+                _Stage.refreshConnectionsLayer();
             });
 
             this.points
