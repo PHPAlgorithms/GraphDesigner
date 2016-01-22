@@ -300,7 +300,7 @@ var _Connections = new function () {
                 var line = new Kinetic.Line({
                     points: [first.getX(), first.getY(), second.getX(), second.getY()],
                     stroke: '#000',
-                    strokeWidth: 1.4
+                    strokeWidth: 1.9
                 });
 
                 line.idxs = new Array(connection.getEnd(0), connection.getEnd(1));

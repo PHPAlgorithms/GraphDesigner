@@ -77,6 +77,8 @@
             });
 
             $('div#buttons div.btn#Save-Graph').on('click', function () {
+                _Action.toDefault();
+
                 $.ajax({
                     data: 'graphName=' + $('#graphs-list .list-group .active').text() + '&points=' + _Points.toSave() + '&connections=' + _Connections.toSave(),
                     dataType: 'json',
