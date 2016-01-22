@@ -1,5 +1,5 @@
 var _Action = new function () {
-    var availableActions = new Array('none', 'addpoint', 'removepoint', 'addconnection');
+    var availableActions = new Array('none', 'addpoint', 'removepoint', 'addconnection', 'removeconnection');
     this.current = 'none'
     this.change = function (action) {
         if (typeof action != 'undefined') {
@@ -277,6 +277,16 @@ var _Connections = new function () {
                 });
 
                 line.idxs = new Array(connection.getEnd(0), connection.getEnd(1));
+
+                line.on('click', function () {
+                    console.log('try to delete line');
+                    if (_Action.getCurrent() == 'removeconnection') {
+                        _Connections.remove(this.idxs);
+
+                        _Stage.refreshConnectionsLayer();
+                    }
+                });
+
                 this.connections
                     .push(line);
 
@@ -336,6 +346,29 @@ var _Connections = new function () {
 
         this.connections = newConnections;
     };
+    this.remove = function (idxs) {
+        for (var a = 0; a < this.connections.length; a++) {
+            if ((this.connections[a].idxs[0] == idxs[0]) && (this.connections[a].idxs[1] == idxs[1])) {
+                this.connections[a]
+                    .remove();
+                delete this.connections[a];
+
+                this.connections = this.connections.slice(0, a)
+                                       .concat(this.connections
+                                                   .slice(a + 1));
+            }
+        }
+    };
+    this.checkConnection = function (id1, id2) {
+        for (var a = 0; a < this.connections.length; a++) {
+            if (((this.connections[a].idxs[0] == id1) && (this.connections[a].idxs[1] == id2)) ||
+                ((this.connections[a].idxs[0] == id2) && (this.connections[a].idxs[1] == id1))) {
+                return false;
+            }
+        }
+
+        return true;
+    };
 };
 
 var _Connection = new function () {
@@ -350,13 +383,19 @@ var _Connection = new function () {
                 this.clear();
             } else {
                 this.ends[1] = id;
-                _Connections.add(this);
+
+                if (_Connections.checkConnection(this.ends[0], this.ends[1])) {
+                    _Connections.add(this);
+                } else {
+                    this.clear();
+                }
             }
         }
     };
     this.clear = function () {
         this.ends[0] = this.ends[1]
                      = -1;
+        _Action.toDefault();
     };
     this.getEnd = function (n) {
         return this.ends[n];
