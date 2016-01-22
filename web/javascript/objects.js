@@ -14,6 +14,7 @@ var _Action = new function () {
                 }
 
                 this.current = action;
+                console.log('Changed to ' + action);
             } else {
                 _Action.toDefault();
                 throw 'Action not exists!';
@@ -179,6 +180,7 @@ var _Points = new function (points) {
     this.add = function (x, y) {
         if (this.check(x, y)) {
             var point = new Kinetic.Circle({
+                draggable: true,
                 fill: '#fff',
                 radius: 6,
                 stroke: '#000',
@@ -186,6 +188,9 @@ var _Points = new function (points) {
                 x: x,
                 y: y
             });
+
+            point.attrs.x = parseInt(point.attrs.x);
+            point.attrs.y = parseInt(point.attrs.y);
 
             point.on('click', function () {
                 switch (_Action.getCurrent()) {
@@ -196,10 +201,32 @@ var _Points = new function (points) {
                         _Stage.refreshConnectionsLayer();
                         break;
                     case 'addconnection':
+                        console.log('Add ' + _Points.points
+                                               .indexOf(this));
                         _Connection.add(_Points.points
                                                .indexOf(this));
                         break;
                 }
+            })
+            .on('dragstart', function () {
+                _Action.toDefault();
+            })
+            .on('dragmove', function () {
+                var pointIndex = _Points.points
+                                        .indexOf(this);
+                var connections = _Connections.getConnections(pointIndex);
+                for (var a = 0; a < connections.length; a++) {
+                    if (connections[a].idxs[0] == pointIndex) {
+                        connections[a].attrs.points[0] = this.getX();
+                        connections[a].attrs.points[1] = this.getY();
+                    } else {
+                        connections[a].attrs.points[2] = this.getX();
+                        connections[a].attrs.points[3] = this.getY();
+                    }
+                }
+
+                _Stage.getConnectionsLayer()
+                      .draw();
             });
 
             this.points
@@ -273,7 +300,7 @@ var _Connections = new function () {
                 var line = new Kinetic.Line({
                     points: [first.getX(), first.getY(), second.getX(), second.getY()],
                     stroke: '#000',
-                    strokeWidth: 1.2
+                    strokeWidth: 1.4
                 });
 
                 line.idxs = new Array(connection.getEnd(0), connection.getEnd(1));
@@ -367,6 +394,15 @@ var _Connections = new function () {
         }
 
         return true;
+    };
+    this.getConnections = function (pointN) {
+        var returnedConnetions = new Array();
+        for (var a = 0; a < this.connections.length; a++) {
+            if ((this.connections[a].idxs[0] == pointN) || (this.connections[a].idxs[1] == pointN)) {
+                returnedConnetions.push(this.connections[a]);
+            }
+        }
+        return returnedConnetions;
     };
 };
 
