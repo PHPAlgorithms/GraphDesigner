@@ -192,9 +192,8 @@ var _Points = new function (points) {
                     case 'removepoint':
                         _Points.remove(this.getX(), this.getY());
 
-                        this.remove();
-
                         _Stage.refreshPointsLayer();
+                        _Stage.refreshConnectionsLayer();
                         break;
                     case 'addconnection':
                         _Connection.add(_Points.points
@@ -217,13 +216,16 @@ var _Points = new function (points) {
         if (this.points.length > 0) {
             for (var a = 0; a < this.points.length; a++) {
                 if ((this.points[a].getX() == x) && (this.points[a].getY() == y)) {
+                    this.points[a]
+                        .remove();
                     delete this.points[a];
 
-                    _Points.points = _Points.points.slice(0, a)
-                                            .concat(_Points.points
-                                                           .slice(a + 1));
+                    this.points = this.points.slice(0, a)
+                                      .concat(this.points
+                                                  .slice(a + 1));
 
-                    _Points.count--;
+                    _Connections.removeFromPoint(a);
+                    break;
                 }
             }
         }
@@ -309,6 +311,30 @@ var _Connections = new function () {
                               .idxs[1];
         }
         return saveString;
+    };
+    this.removeFromPoint = function (pointN) {
+        var newConnections = new Array();
+
+        for (var a = 0; a < this.connections.length; a++) {
+            if ((this.connections[a].idxs[0] == pointN) || (this.connections[a].idxs[1] == pointN)) {
+                this.connections[a]
+                    .remove();
+                delete this.connections[a];
+            } else {
+                if (this.connections[a].idxs[0] > pointN) {
+                    this.connections[a]
+                        .idxs[0]--;
+                }
+                if (this.connections[a].idxs[1] > pointN) {
+                    this.connections[a]
+                        .idxs[1]--;
+                }
+
+                newConnections.push(this.connections[a]);
+            }
+        }
+
+        this.connections = newConnections;
     };
 };
 
