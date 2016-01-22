@@ -32,16 +32,28 @@ class GraphController extends Controller
                 $toSave = null;
             } else {
                 try {
-                    $toSave = array();
+                    $toSave = array('points' => array(), 'connections' => array());
 
                     $points = explode(',', $points);
                     foreach ($points as $i => $point) {
                         list($x, $y) = explode(':', $point);
-                        $toSave[] = [
+                        $toSave['points'][] = [
                             'id' => $i,
                             'x' => $x,
-                            'y' => $y
+                            'y' => $y,
                         ];
+                    }
+
+                    $connections = $request->get('connections');
+                    if (!empty($connections)) {
+                        $connections = explode(',', $connections);
+                        foreach ($connections as $connection) {
+                            list($from, $to) = explode(':', $connection);
+                            $toSave['connections'][] = [
+                                'from' => $from,
+                                'to' => $to,
+                            ];
+                        }
                     }
                 } catch (Exception $e) {
                     return new JsonResponse([
@@ -83,12 +95,14 @@ class GraphController extends Controller
             if ($fs->exists($graphPath)) {
                 $fileContent = file_get_contents($graphPath);
 
-                $pointsArray = unserialize($fileContent);
-                if (is_array($pointsArray)) {
+                $contentArray = unserialize($fileContent);
+                if (is_array($contentArray)) {
                     try {
                         return new JsonResponse([
-                            'count' => count($pointsArray),
-                            'points' => $pointsArray,
+                            'connections' => $contentArray['connections'],
+                            'connectionscount' => count($contentArray['connections']),
+                            'points' => $contentArray['points'],
+                            'pointscount' => count($contentArray['points']),
                             'success' => 1
                         ]);
                     } catch (Exception $e) {

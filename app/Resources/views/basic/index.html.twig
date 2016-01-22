@@ -78,12 +78,16 @@
 
             $('div#buttons div.btn#Save-Graph').on('click', function () {
                 $.ajax({
-                    data: 'points=' + _Points.toSave() + '&graphName=' + $('#graphs-list .list-group .active').text(),
+                    data: 'graphName=' + $('#graphs-list .list-group .active').text() + '&points=' + _Points.toSave() + '&connections=' + _Connections.toSave(),
                     dataType: 'json',
                     url: '/save-graph',
                     method: 'post',
                     success: function (data) {
-                        
+                        if (data.success) {
+                            
+                        } else {
+                            
+                        }
                     }
                 });
             });

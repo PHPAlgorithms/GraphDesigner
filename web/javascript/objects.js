@@ -93,12 +93,39 @@ var _Stage = new function () {
 
             var pointsLayer = this.getPointsLayer();
 
-            _Points.loadGraph(graphName);
+            this.loadGraph(graphName);
             _Points.eachOne(function (point) {
                 pointsLayer.add(_Points[a]);
             });
             pointsLayer.draw();
         }
+    };
+    this.loadGraph = function (name) {
+        $.ajax({
+            data: 'graphName=' + name,
+            dataType: 'json',
+            method: 'post',
+            url: '/load-graph',
+            success: function (data) {
+                if (data.success) {
+                    for (var a = 0; a < data.pointscount; a++) {
+                        _Points.add(data.points[a].x, data.points[a].y);
+                    }
+
+                    for (var a = 0; a < data.connectionscount; a++) {
+                        try {
+                            _Points.getPoint(data.connections[a].from);
+                            _Points.getPoint(data.connections[a].to);
+
+                            _Connection.add(data.connections[a].from);
+                            _Connection.add(data.connections[a].to);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            }
+        });
     };
     this.add = function (element) {
         return this.stage
@@ -216,21 +243,6 @@ var _Points = new function (points) {
         }
         return saveString;
     };
-    this.loadGraph = function (name) {
-        $.ajax({
-            data: 'graphName=' + name,
-            dataType: 'json',
-            method: 'post',
-            url: '/load-graph',
-            success: function (data) {
-                if (data.success) {
-                    for (var a = 0; a < data.count; a++) {
-                        _Points.add(data.points[a].x, data.points[a].y);
-                    }
-                }
-            }
-        });
-    };
     this.getID = function (x, y) {
         if (this.points.length > 0) {
             for (var a = 0; a < this.points.length; a++) {
@@ -262,6 +274,7 @@ var _Connections = new function () {
                     strokeWidth: 1.2
                 });
 
+                line.idxs = new Array(connection.getEnd(0), connection.getEnd(1));
                 this.connections
                     .push(line);
 
@@ -281,6 +294,21 @@ var _Connections = new function () {
             delete this.connections;
             this.connections = new Array();
         }
+    };
+    this.toSave = function () {
+        var saveString = '';
+        for (var a = 0; a < this.connections.length; a++) {
+            if (saveString != '') {
+                saveString += ',';
+            }
+
+            saveString += this.connections[a]
+                              .idxs[0] +
+                          ':' +
+                          this.connections[a]
+                              .idxs[1];
+        }
+        return saveString;
     };
 };
 
