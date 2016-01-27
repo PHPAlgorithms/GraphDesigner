@@ -5818,58 +5818,7 @@ button.close {
     display: none !important; } }
 
 body {
-  background-color: #f5f5f5;
-  /*
-            body {
-                background-color: #f5f5f5;
-            }
-            #main-container {
-                background-color: #fff;
-                border: 1px solid #4f86f7;
-                border-radius: 3px;
-                margin-top: 30px;
-            }
-            #menu {
-                background-color: #6699cc;
-                border-bottom: 1px solid #4f86f7;
-                margin-bottom: 9px;
-                margin-left: -15px;
-                margin-right: -15px;
-            }
-            #menu li {
-                background-color: #fefefe;
-                margin: 0;
-            }
-            #menu li:hover {
-                background-color: #f5f5f5;
-            }
-            #menu li:not(:first-child) {
-                border-left: 1px dashed #6699cc;
-            }
-            #menu li.active a {
-                background-color: #9aceeb;
-            }
-            #menu li.active:hover a {
-                background-color: #a6e7ff;
-            }
-            #menu li a {
-                border-radius: 0;
-                color: #6699cc;
-            }
-            #menu li:hover a {
-                color: #4f86f7;
-            }
-            #foot {
-                font-size: 10px;
-            }
-            #version-tag {
-                font-size: 8px;
-            }
-            #graphs-list .list-group-item.active {
-                background-color: #8ba8b7;
-                border-color: #8ba8b7;
-            }
-*/ }
+  background-color: #f5f5f5; }
   body div#main-container {
     background-color: #fff;
     border: 1px solid #318b0b;
@@ -5903,7 +5852,54 @@ body {
           color: #297409; }
           body div#main-container ul#menu li a:hover {
             background: none; }
+    body div#main-container div#graphs-list {
+      border: 1px solid #7bb217; }
+      body div#main-container div#graphs-list div.panel-heading {
+        background-color: #cfff79;
+        border-color: #7bb217;
+        color: #46660d;
+        line-height: 30px; }
+      body div#main-container div#graphs-list button#add-new {
+        background-color: #e7ffbc;
+        border-color: #7bb217;
+        color: #7bb217;
+        outline: 0; }
+        body div#main-container div#graphs-list button#add-new:hover {
+          background-color: #d7ff90;
+          border-color: #587f10;
+          color: #587f10; }
     body div#main-container div#foot {
       font-size: 10px; }
       body div#main-container div#foot div#version-tag {
         font-size: 8px; }
+  body div#popup-container {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100; }
+    body div#popup-container div#popup {
+      background-color: #fff;
+      border: 1px solid #318b0b;
+      border-radius: 3px;
+      padding: 0 0 32px; }
+      body div#popup-container div#popup button#popup-close {
+        margin: 5px 5px 5px 0; }
+      body div#popup-container div#popup span.input-group-addon, body div#popup-container div#popup input.form-control, body div#popup-container div#popup button.btn {
+        background-color: #e7ffbc;
+        border-color: #7bb217;
+        color: #7bb217;
+        outline: 0; }
+        body div#popup-container div#popup span.input-group-addon:hover, body div#popup-container div#popup input.form-control:hover, body div#popup-container div#popup button.btn:hover {
+          background-color: #d7ff90;
+          border-color: #587f10;
+          color: #587f10; }
+      body div#popup-container div#popup input[type="text"] {
+        background-color: #fff; }
+        body div#popup-container div#popup input[type="text"]:hover {
+          background-color: #f7ffe8; }
+      body div#popup-container div#popup div.form-alert {
+        display: none;
+        margin-bottom: 0;
+        margin-top: 6px;
+        padding: 4px; }

@@ -1,5 +1,6 @@
 @import '_bootstrap';
 $borderColor: #318b0b;
+
 $menuBackgroundColor: #63ea2a;
 $menuElementBackgroundColor: #b9f5a0;
 $menuElementHoverBackgroundColor: #a8f389;
@@ -9,6 +10,19 @@ $menuElementActiveBackgroundColor: #49d011;
 $menuElementActiveHoverBackgroundColor: #52e813;
 $menuElementActiveFontColor: #184505;
 $menuElementActiveHoverFontColor: #081701;
+
+$listBorderColor: #7bb217;
+$listPanelBackgroundColor: #cfff79;
+$listPanelFontColor: #46660d;
+$listPanelButtonDarkColor: $listBorderColor;
+$listPanelButtonHoverDarkColor: #587f10;
+$listPanelButtonLightColor: #e7ffbc;
+$listPanelButtonHoverLightColor: #d7ff90;
+
+$popupButtonDarkColor: $listPanelButtonDarkColor;
+$popupButtonHoverDarkColor: $listPanelButtonHoverDarkColor;
+$popupButtonLightColor: $listPanelButtonLightColor;
+$popupButtonHoverLightColor: $listPanelButtonHoverLightColor;
 
 body {
     background-color: #f5f5f5;
@@ -67,11 +81,82 @@ body {
             }
         }
 
+        div#graphs-list {
+            border: 1px solid $listBorderColor;
+
+            div.panel-heading {
+                background-color: $listPanelBackgroundColor;
+                border-color: $listBorderColor;
+                color: $listPanelFontColor;
+                line-height: 30px;
+            }
+
+            button#add-new {
+                background-color: $listPanelButtonLightColor;
+                border-color: $listPanelButtonDarkColor;
+                color: $listPanelButtonDarkColor;
+                outline: 0;
+
+                &:hover {
+                    background-color: $listPanelButtonHoverLightColor;
+                    border-color: $listPanelButtonHoverDarkColor;
+                    color: $listPanelButtonHoverDarkColor;
+                }
+            }
+        }
+
         div#foot {
             font-size: 10px;
 
             div#version-tag {
                 font-size: 8px;
+            }
+        }
+    }
+
+    div#popup-container {
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 100;
+
+        div#popup {
+            background-color: #fff;
+            border: 1px solid $borderColor;
+            border-radius: 3px;
+            padding: 0 0 32px;
+
+            button#popup-close {
+                margin: 5px 5px 5px 0;
+            }
+
+            span.input-group-addon, input.form-control, button.btn {
+                background-color: $popupButtonLightColor;
+                border-color: $popupButtonDarkColor;
+                color: $popupButtonDarkColor;
+                outline: 0;
+
+                &:hover {
+                    background-color: $popupButtonHoverLightColor;
+                    border-color: $popupButtonHoverDarkColor;
+                    color: $popupButtonHoverDarkColor;
+                }
+            }
+
+            input[type="text"] {
+                background-color: #fff;
+
+                &:hover {
+                    background-color: #f7ffe8;
+                }
+            }
+
+            div.form-alert {
+                display: none;
+                margin-bottom: 0;
+                margin-top: 6px;
+                padding: 4px;
             }
         }
     }
