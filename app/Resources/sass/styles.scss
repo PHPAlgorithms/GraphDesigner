@@ -11,6 +11,12 @@ $menuElementActiveHoverBackgroundColor: #52e813;
 $menuElementActiveFontColor: #184505;
 $menuElementActiveHoverFontColor: #081701;
 
+/*
+Main colours:
+  green: B0FF21
+  red: CC2706
+*/
+
 $listBorderColor: #7bb217;
 $listPanelBackgroundColor: #cfff79;
 $listPanelFontColor: #46660d;
@@ -91,6 +97,26 @@ body {
                 line-height: 30px;
             }
 
+            div.list-group {
+                a {
+                    border-color: $listBorderColor;
+
+                    &:hover {
+                        background-color: #e7ffbc;
+                    }
+
+                    &.active {
+                        background-color: #9ee51d;
+                        color: #46660d;
+
+                        &:hover {
+                            background-color: #8ccc1a;
+                            color: #233306;
+                        }
+                    }
+                }
+            }
+
             button#add-new {
                 background-color: $listPanelButtonLightColor;
                 border-color: $listPanelButtonDarkColor;
@@ -141,6 +167,18 @@ body {
                     background-color: $popupButtonHoverLightColor;
                     border-color: $popupButtonHoverDarkColor;
                     color: $popupButtonHoverDarkColor;
+                }
+
+                &.btn-danger {
+                    background-color: #efbeb4;
+                    border-color: #8e1b04;
+                    color: #8e1b04;
+
+                    &:hover {
+                        background-color: #e59382;
+                        border-color: #661303;
+                        color: #661303;
+                    }
                 }
             }
 

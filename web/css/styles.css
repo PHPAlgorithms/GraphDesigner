@@ -5817,6 +5817,11 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+/*
+Main colours:
+  green: B0FF21
+  red: CC2706
+*/
 body {
   background-color: #f5f5f5; }
   body div#main-container {
@@ -5859,6 +5864,16 @@ body {
         border-color: #7bb217;
         color: #46660d;
         line-height: 30px; }
+      body div#main-container div#graphs-list div.list-group a {
+        border-color: #7bb217; }
+        body div#main-container div#graphs-list div.list-group a:hover {
+          background-color: #e7ffbc; }
+        body div#main-container div#graphs-list div.list-group a.active {
+          background-color: #9ee51d;
+          color: #46660d; }
+          body div#main-container div#graphs-list div.list-group a.active:hover {
+            background-color: #8ccc1a;
+            color: #233306; }
       body div#main-container div#graphs-list button#add-new {
         background-color: #e7ffbc;
         border-color: #7bb217;
@@ -5894,6 +5909,14 @@ body {
           background-color: #d7ff90;
           border-color: #587f10;
           color: #587f10; }
+        body div#popup-container div#popup span.input-group-addon.btn-danger, body div#popup-container div#popup input.form-control.btn-danger, body div#popup-container div#popup button.btn.btn-danger {
+          background-color: #efbeb4;
+          border-color: #8e1b04;
+          color: #8e1b04; }
+          body div#popup-container div#popup span.input-group-addon.btn-danger:hover, body div#popup-container div#popup input.form-control.btn-danger:hover, body div#popup-container div#popup button.btn.btn-danger:hover {
+            background-color: #e59382;
+            border-color: #661303;
+            color: #661303; }
       body div#popup-container div#popup input[type="text"] {
         background-color: #fff; }
         body div#popup-container div#popup input[type="text"]:hover {
