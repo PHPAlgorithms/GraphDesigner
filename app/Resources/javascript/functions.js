@@ -35,3 +35,18 @@ function refreshList()
         }
     });
 }
+
+function addErrorClass(element)
+{
+    var parent = $(element).parent('.input-group');
+    parent.addClass('has-error');
+    parent.find('.btn-default').removeClass('btn-default').addClass('btn-danger');
+}
+function removeErrorClass(element)
+{
+    var parent = $(element).parent('.input-group');
+    if (parent.hasClass('has-error')) {
+        parent.removeClass('has-error');
+        parent.find('.btn-danger').removeClass('btn-danger').addClass('btn-default');
+    }
+}

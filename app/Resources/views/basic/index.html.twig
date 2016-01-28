@@ -38,38 +38,6 @@
             }
 
             _Stage.create();
-
-            $('div#control-buttons div.btn-group div').on('click', function () {
-                _Action.change($(this).attr('id'));
-            });
-
-            $('div#canvas-area').on('contextmenu', function () {
-                _Action.toDefault();
-                return false;
-            })
-            .on('click', function (event) {
-                if (_Action.currentIs('addpoint')) {
-                    _Points.add(event.offsetX, event.offsetY);
-                }
-            });
-
-            $('div#control-buttons div.btn#save-graph').on('click', function () {
-                _Action.toDefault();
-
-                $.ajax({
-                    data: 'graphName=' + $('#graphs-list .list-group .active').text() + '&points=' + _Points.toSave() + '&connections=' + _Connections.toSave(),
-                    dataType: 'json',
-                    url: '/save-graph',
-                    method: 'post',
-                    success: function (data) {
-                        if (data.success) {
-                            
-                        } else {
-                            
-                        }
-                    }
-                });
-            });
         });
     </script>
 {% endblock %}

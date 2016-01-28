@@ -496,3 +496,28 @@ var _Connection = new function () {
         return this.distance;
     };
 };
+
+var _Container = new function () {
+    var availableTypes = new Array('error', 'info', 'success');
+    function checkType(type) {
+        if (availableTypes.indexOf(type.toLowerCase()) != -1) {
+            return true;
+        } else {
+            throw 'Unknown type!';
+        }
+    }
+    this.show = function (message, type) {
+        type = type.toLowerCase();
+        if (checkType(type)) {
+            $('#form-' + type).css('display', 'block')
+                          .html(message);
+        }
+    };
+    this.hide = function (type) {
+        type = type.toLowerCase();
+        if (checkType(type)) {
+            $('#form-' + type).css('display', 'none')
+                              .html('');
+        }
+    };
+};
