@@ -5898,12 +5898,6 @@ body {
       border: 1px solid #000;
       overflow: hidden;
       padding: 0; }
-    body div#main-container div#graph-designer img#loader-image {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin-top: -32px;
-      margin-left: -32px; }
     body div#main-container div#foot {
       font-size: 10px; }
       body div#main-container div#foot div#version-tag {
@@ -5966,3 +5960,9 @@ body {
         margin-bottom: 0;
         margin-top: 6px;
         padding: 4px; }
+  body img#loader-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -32px;
+    margin-left: -32px; }
