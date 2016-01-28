@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="row" id="graph-designer">
-        <div class="col-md-12" id="buttons">
+        <div class="col-md-12" id="control-buttons">
             <div class="btn-group" role="group" aria-label="Modify Your Graph">
                 <div class="btn btn-success btn-xs" id="AddPoint">Add</div>
                 <div class="btn btn-danger btn-xs" id="RemovePoint">Remove</div>
@@ -20,39 +20,12 @@
                 <div class="btn btn-danger btn-xs" id="RemoveConnection">Remove</div>
                 <div class="btn btn-default btn-xs">Connection</div>
             </div>
-            <div class="btn btn-warning btn-xs" id="Save-Graph">Save</div>
+            <div class="btn btn-warning btn-xs pull-right" id="save-graph">Save</div>
         </div>
         <div class="col-md-12" id="canvas-area">
             {# canvas area #}
         </div>
     </div>
-{% endblock %}
-
-{% block stylesheets %}
-<style type="text/css">
-    #choose-graph, #graph-designer {
-        display: none;
-    }
-    #graph-designer #buttons {
-        margin-bottom: 5px;
-        padding: 0;
-    }
-    #graph-designer #Save-Graph {
-        float: right;
-    }
-    #graph-designer #canvas-area {
-        border: 1px solid #000;
-        overflow: hidden;
-        padding: 0;
-    }
-    img#loader-image {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -32px;
-        margin-left: -32px;
-    }
-</style>
 {% endblock %}
 
 {% block javascripts %}
@@ -66,7 +39,7 @@
 
             _Stage.create();
 
-            $('div#buttons div.btn-group div').on('click', function () {
+            $('div#control-buttons div.btn-group div').on('click', function () {
                 _Action.change($(this).attr('id'));
             });
 
@@ -80,7 +53,7 @@
                 }
             });
 
-            $('div#buttons div.btn#Save-Graph').on('click', function () {
+            $('div#control-buttons div.btn#save-graph').on('click', function () {
                 _Action.toDefault();
 
                 $.ajax({

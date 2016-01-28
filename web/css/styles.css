@@ -5860,7 +5860,7 @@ body {
     body div#main-container div#graphs-list {
       border: 1px solid #7bb217; }
       body div#main-container div#graphs-list div.panel-heading {
-        background-color: #cfff79;
+        background-color: #b0ff21;
         border-color: #7bb217;
         color: #46660d;
         line-height: 30px; }
@@ -5869,10 +5869,10 @@ body {
         body div#main-container div#graphs-list div.list-group a:hover {
           background-color: #e7ffbc; }
         body div#main-container div#graphs-list div.list-group a.active {
-          background-color: #9ee51d;
+          background-color: #cfff79;
           color: #46660d; }
           body div#main-container div#graphs-list div.list-group a.active:hover {
-            background-color: #8ccc1a;
+            background-color: #bfff4d;
             color: #233306; }
       body div#main-container div#graphs-list button#add-new {
         background-color: #e7ffbc;
@@ -5883,6 +5883,27 @@ body {
           background-color: #d7ff90;
           border-color: #587f10;
           color: #587f10; }
+    body div#main-container div#graph-designer, body div#main-container div#choose-graph {
+      display: none; }
+    body div#main-container div#graph-designer div#control-buttons {
+      margin-bottom: 5px;
+      padding: 0; }
+      body div#main-container div#graph-designer div#control-buttons div#save-graph {
+        background-color: #e5d012;
+        border-color: #b2a20e; }
+        body div#main-container div#graph-designer div#control-buttons div#save-graph:hover {
+          background-color: #ffe815;
+          border-color: #ccb910; }
+    body div#main-container div#graph-designer div#canvas-area {
+      border: 1px solid #000;
+      overflow: hidden;
+      padding: 0; }
+    body div#main-container div#graph-designer img#loader-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -32px;
+      margin-left: -32px; }
     body div#main-container div#foot {
       font-size: 10px; }
       body div#main-container div#foot div#version-tag {
@@ -5899,27 +5920,46 @@ body {
       border-radius: 3px;
       padding: 0 0 32px; }
       body div#popup-container div#popup button#popup-close {
-        margin: 5px 5px 5px 0; }
-      body div#popup-container div#popup span.input-group-addon, body div#popup-container div#popup input.form-control, body div#popup-container div#popup button.btn {
+        background-color: #b72305;
+        border-color: #b72305;
+        color: #fff;
+        margin: 5px 5px 5px 0;
+        outline: 0; }
+        body div#popup-container div#popup button#popup-close:hover {
+          background-color: #d13c1e; }
+      body div#popup-container div#popup div.input-group.has-error span.input-group-addon, body div#popup-container div#popup div.input-group.has-error input.form-control, body div#popup-container div#popup div.input-group.has-error button.btn {
+        background-color: #efbeb4;
+        border-color: #8e1b04;
+        color: #8e1b04;
+        outline: 0; }
+        body div#popup-container div#popup div.input-group.has-error span.input-group-addon:hover, body div#popup-container div#popup div.input-group.has-error input.form-control:hover, body div#popup-container div#popup div.input-group.has-error button.btn:hover {
+          background-color: #e59382;
+          border-color: #661303;
+          color: #661303; }
+      body div#popup-container div#popup div.input-group.has-error button.btn-danger {
+        background-color: #efbeb4;
+        border-color: #8e1b04;
+        color: #8e1b04; }
+        body div#popup-container div#popup div.input-group.has-error button.btn-danger:hover {
+          background-color: #e59382;
+          border-color: #661303;
+          color: #661303; }
+      body div#popup-container div#popup div.input-group.has-error input[type="text"] {
+        background-color: #fff; }
+        body div#popup-container div#popup div.input-group.has-error input[type="text"]:hover {
+          background-color: #f9e9e6; }
+      body div#popup-container div#popup div.input-group span.input-group-addon, body div#popup-container div#popup div.input-group input.form-control, body div#popup-container div#popup div.input-group button.btn {
         background-color: #e7ffbc;
         border-color: #7bb217;
         color: #7bb217;
         outline: 0; }
-        body div#popup-container div#popup span.input-group-addon:hover, body div#popup-container div#popup input.form-control:hover, body div#popup-container div#popup button.btn:hover {
+        body div#popup-container div#popup div.input-group span.input-group-addon:hover, body div#popup-container div#popup div.input-group input.form-control:hover, body div#popup-container div#popup div.input-group button.btn:hover {
           background-color: #d7ff90;
           border-color: #587f10;
           color: #587f10; }
-        body div#popup-container div#popup span.input-group-addon.btn-danger, body div#popup-container div#popup input.form-control.btn-danger, body div#popup-container div#popup button.btn.btn-danger {
-          background-color: #efbeb4;
-          border-color: #8e1b04;
-          color: #8e1b04; }
-          body div#popup-container div#popup span.input-group-addon.btn-danger:hover, body div#popup-container div#popup input.form-control.btn-danger:hover, body div#popup-container div#popup button.btn.btn-danger:hover {
-            background-color: #e59382;
-            border-color: #661303;
-            color: #661303; }
-      body div#popup-container div#popup input[type="text"] {
+      body div#popup-container div#popup div.input-group input[type="text"] {
         background-color: #fff; }
-        body div#popup-container div#popup input[type="text"]:hover {
+        body div#popup-container div#popup div.input-group input[type="text"]:hover {
           background-color: #f7ffe8; }
       body div#popup-container div#popup div.form-alert {
         display: none;
