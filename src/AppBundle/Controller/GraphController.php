@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Controller;
 
+use Algorithms\GraphTools\Point;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -37,11 +38,12 @@ class GraphController extends Controller
                     $points = explode(',', $points);
                     foreach ($points as $i => $point) {
                         list($x, $y) = explode(':', $point);
-                        $toSave['points'][] = [
-                            'id' => $i,
-                            'x' => $x,
-                            'y' => $y,
-                        ];
+
+                        $pointObj = new Point($i);
+                        $pointObj->setX($x)
+                                 ->setY($y);
+
+                        $toSave['points'][] = $pointObj;
                     }
 
                     $connections = $request->get('connections');
@@ -98,10 +100,15 @@ class GraphController extends Controller
                 $contentArray = unserialize($fileContent);
                 if (is_array($contentArray)) {
                     try {
+                        $points = array();
+                        foreach ($contentArray['points'] as $point) {
+                            $points[] = $point->toArray();
+                        }
+
                         return new JsonResponse([
                             'connections' => $contentArray['connections'],
                             'connectionscount' => count($contentArray['connections']),
-                            'points' => $contentArray['points'],
+                            'points' => $points,
                             'pointscount' => count($contentArray['points']),
                             'success' => 1
                         ]);
