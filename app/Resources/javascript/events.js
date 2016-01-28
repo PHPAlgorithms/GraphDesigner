@@ -32,21 +32,19 @@ $(document).ready(function () {
 
     //
 
-    $('#graph-name').on('focus', function () {
+    $(document).on('submit', 'form#graph-create-form', function () {
+        $('button#graph-create').click();
+        return false;
+    })
+    .on('focus', 'input#graph-name', function () {
         removeErrorClass($(this));
         _Container.hide('error');
     })
-    .on('change', function () {
+    .on('change', 'input#graph-name', function () {
         removeErrorClass($(this));
         _Container.hide('error');
-    });
-
-    $('form').on('submit', function () {
-        $('#create').click();
-        return false;
-    });
-
-    $('#create').on('click', function () {
+    })
+    .on('click', 'button#graph-create', function () {
         _Container.hide('success');
 
         var graphNameElement = $('#graph-name');
@@ -106,20 +104,19 @@ $(document).ready(function () {
             }
         }
         return false;
-    });
-
-    $('#popup-container #popup-close').on('click', function () {
+    })
+    .on('click', '#popup-container #popup-close', function () {
         $('#popup-container').remove();
 
         return false;
     });
 
     //
-    $('div#canvas-area').on('contextmenu', function () {
+    $(document).on('contextmenu', 'div#canvas-area', function () {
         _Action.toDefault();
         return false;
     })
-    .on('click', function (event) {
+    .on('click', 'div#canvas-area', function (event) {
         if (_Action.currentIs('addpoint')) {
             _Points.add(event.offsetX, event.offsetY);
         }
