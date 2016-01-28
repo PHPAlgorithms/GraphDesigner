@@ -191,7 +191,7 @@ var _Points = new function (points) {
         }
     };
     this.add = function (x, y) {
-        if (this.check(x, y)) {
+        //if (this.check(x, y)) {
             var point = new Kinetic.Circle({
                 draggable: true,
                 fill: '#fff',
@@ -247,9 +247,9 @@ var _Points = new function (points) {
             _Stage.getPointsLayer()
                   .add(point)
                   .draw();
-        } else {
-            alert('Point on position (' + x + ', ' + y + ') exists!');
-        }
+        // } else {
+            // alert('Point on position (' + x + ', ' + y + ') exists!');
+        // }
     };
     this.remove = function (x, y) {
         if (this.points.length > 0) {
