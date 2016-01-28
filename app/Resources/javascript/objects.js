@@ -94,7 +94,22 @@ var _Stage = new function () {
             if (!loading) {
                 loading = true;
 
+                var block = $('div#main-container div.col-md-9');
+                var offset = block.offset();
+
                 $('body').append('<img id="loader-image" src="/images/loader.gif" />');
+
+                if ($('div#canvas-area').offset().top > 0) {
+                    $('img#loader-image').css({
+                        left: ((block.width() / 2) + offset.left),
+                        top: ((block.height() / 2) + offset.top - 32)
+                    });
+                } else {
+                    $('img#loader-image').css({
+                        left: ((block.width() / 2) + offset.left),
+                        top: ((block.height() / 2) + offset.top + 50)
+                    });
+                }
 
                 this.clear();
 
@@ -132,7 +147,7 @@ var _Stage = new function () {
                             _Points.getPoint(data.connections[a].to);
 
                             _Connection.add(data.connections[a].from);
-                            _Connection.add(data.connections[a].to);
+                            _Connection.add(data.connections[a].to, data.connections[a].distance);
                         } catch (e) {
                             console.log(e);
                         }
@@ -316,6 +331,7 @@ var _Connections = new function () {
                 });
 
                 line.idxs = new Array(connection.getEnd(0), connection.getEnd(1));
+                line.distance = connection.getDinstace();
 
                 line.on('click', function () {
                     if (_Action.getCurrent() == 'removeconnection') {
@@ -356,7 +372,10 @@ var _Connections = new function () {
                               .idxs[0] +
                           ':' +
                           this.connections[a]
-                              .idxs[1];
+                              .idxs[1] +
+                          ':' +
+                          this.connections[a]
+                              .distance;
         }
         return saveString;
     };
@@ -419,8 +438,25 @@ var _Connections = new function () {
 };
 
 var _Connection = new function () {
+    var showBox = function (id) {
+        if ($('div#distance-box').length > 0) {
+            $('div#distance-box').remove();
+        }
+
+        $('body').append('<div class="text-center" id="distance-box"><div>How long is this connection?</div><input type="text" /><input type="submit" value="Save" /></div>');
+
+        var point = _Points.getPoint(id);
+        var offset = $('div#canvas-area').offset();
+
+        $('div#distance-box').css({
+            left: point.getX() + offset.left + Math.PI,
+            top: point.getY() + offset.top + Math.PI
+        });
+    };
+
     this.ends = new Array(-1, -1);
-    this.add = function (id) {
+    this.distance = undefined;
+    this.add = function (id, distance) {
         if (this.ends[0] == -1) {
             this.ends[0] = id;
         } else {
@@ -432,7 +468,13 @@ var _Connection = new function () {
                 this.ends[1] = id;
 
                 if (_Connections.checkConnection(this.ends[0], this.ends[1])) {
-                    _Connections.add(this);
+                    distance = parseInt(distance);
+                    if (distance > 0) {
+                        this.distance = distance;
+                        _Connections.add(this);
+                    } else {
+                        showBox(id);
+                    }
                 } else {
                     this.clear();
                 }
@@ -446,5 +488,11 @@ var _Connection = new function () {
     };
     this.getEnd = function (n) {
         return this.ends[n];
+    };
+    this.setDistance = function (distance) {
+        this.distance = distance;
+    };
+    this.getDinstace = function () {
+        return this.distance;
     };
 };

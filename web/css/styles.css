@@ -5961,8 +5961,32 @@ body {
         margin-top: 6px;
         padding: 4px; }
   body img#loader-image {
+    margin-left: -32px;
+    left: 0;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -32px;
-    margin-left: -32px; }
+    top: 0; }
+  body div#distance-box {
+    background-color: #b0ff21;
+    border: 1px solid #7bb217;
+    border-radius: 3px;
+    color: #46660d;
+    left: 0;
+    line-height: 17px;
+    padding: 3px;
+    position: absolute;
+    top: 0; }
+    body div#distance-box div {
+      font-size: 10px; }
+    body div#distance-box input {
+      background-color: #e7ffbc;
+      border: 1px solid #7bb217;
+      color: #7bb217;
+      outline: 0; }
+      body div#distance-box input[type="text"] {
+        font-size: 10px;
+        margin-right: 3px;
+        line-height: 15px;
+        text-align: center;
+        width: 50px; }
+      body div#distance-box input[type="submit"] {
+        font-size: 10px; }

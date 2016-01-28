@@ -264,10 +264,44 @@ body {
     }
 
     img#loader-image {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -32px;
         margin-left: -32px;
+        left: 0;
+        position: absolute;
+        top: 0;
+    }
+
+    div#distance-box {
+        background-color: $listPanelBackgroundColor;
+        border: 1px solid $listBorderColor;
+        border-radius: 3px;
+        color: $listPanelFontColor;
+        left: 0;
+        line-height: 17px;
+        padding: 3px;
+        position: absolute;
+        top: 0;
+
+        div {
+            font-size: 10px;
+        }
+
+        input {
+            background-color: $listPanelButtonLightColor;
+            border: 1px solid $listPanelButtonDarkColor;
+            color: $listPanelButtonDarkColor;
+            outline: 0;
+
+            &[type="text"] {
+                font-size: 10px;
+                margin-right: 3px;
+                line-height: 15px;
+                text-align: center;
+                width: 50px;
+            }
+
+            &[type="submit"] {
+                font-size: 10px;
+            }
+        }
     }
 }

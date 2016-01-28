@@ -50,10 +50,11 @@ class GraphController extends Controller
                     if (!empty($connections)) {
                         $connections = explode(',', $connections);
                         foreach ($connections as $connection) {
-                            list($from, $to) = explode(':', $connection);
+                            list($from, $to, $distance) = explode(':', $connection);
                             $toSave['connections'][] = [
                                 'from' => $from,
                                 'to' => $to,
+                                'distance' => $distance
                             ];
                         }
                     }
