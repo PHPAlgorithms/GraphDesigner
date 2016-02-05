@@ -280,6 +280,7 @@ body {
         padding: 3px;
         position: absolute;
         top: 0;
+        z-index: 100;
 
         div {
             font-size: 10px;
@@ -301,6 +302,45 @@ body {
 
             &[type="submit"] {
                 font-size: 10px;
+                margin: 0 1px;
+            }
+        }
+    }
+
+    ul#context-menu {
+        background-color: $listPanelBackgroundColor;
+        border: 1px solid $listBorderColor;
+        border-radius: 3px;
+        color: $listPanelFontColor;
+        left: 0;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        z-index: 100;
+
+        li {
+            background-color: $listPanelButtonLightColor;
+            border: 1px solid $listPanelButtonDarkColor;
+            color: $listPanelButtonDarkColor;
+            font-size: 12px;
+            margin: 1px;
+            padding: 2px 4px;
+
+            &:first-child {
+                border-bottom: 0;
+                margin-bottom: 0;
+            }
+
+            &:last-child {
+                margin-top: 0;
+            }
+
+            &:hover {
+                background-color: $listPanelButtonHoverLightColor;
+                color: $listPanelButtonDarkColor;
+                cursor: pointer;
             }
         }
     }

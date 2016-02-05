@@ -42,6 +42,7 @@ function addErrorClass(element)
     parent.addClass('has-error');
     parent.find('.btn-default').removeClass('btn-default').addClass('btn-danger');
 }
+
 function removeErrorClass(element)
 {
     var parent = $(element).parent('.input-group');
@@ -49,4 +50,30 @@ function removeErrorClass(element)
         parent.removeClass('has-error');
         parent.find('.btn-danger').removeClass('btn-danger').addClass('btn-default');
     }
+}
+
+function loadContextMenu(menu, index, offset)
+{
+    if ($('ul#context-menu').length > 0) {
+        $('ul#context-menu').remove();
+    }
+
+    $.ajax({
+            url: '/context-' + menu,
+            method: 'post',
+            dataType: 'json',
+            success: function (response) {
+                var appendedHtml = '';
+
+                for (var a = 0; a < response.length; a++) {
+                    appendedHtml += '<li id="' + response[a][0] + '">' + response[a][1] + '</li>';
+                }
+
+                if ((typeof offset.left != 'undefined') && (typeof offset.top != 'undefined')) {
+                    $('body').append('<ul data-index="' + index + '" id="context-menu" style="left: ' + offset.left + 'px; top: ' + offset.top + 'px;">' + appendedHtml + '</ul>');
+                } else {
+                    $('body').append('<ul data-index="' + index + '" id="context-menu">' + appendedHtml + '</ul>');
+                }
+            }
+    });
 }

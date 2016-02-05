@@ -133,4 +133,36 @@ class GraphController extends Controller
             }
         }
     }
+
+    /**
+     * @Route("/remove-graph", name="remove graph", condition="request.isXmlHttpRequest()")
+     * @Method("POST")
+     */
+    public function removeGraphAction(Request $request)
+    {
+        $graphName = trim($request->get('graphName'));
+        if (empty($graphName)) {
+            return new JsonResponse([
+                'nameEmpty' => 1,
+                'success' => 0,
+            ]);
+        } else {
+             $graphPath = $this->container
+                              ->getParameter('kernel.root_dir') . "\\Resources\\saved-graphs\\{$graphName}.grph";
+
+            $fs = new Filesystem();
+            if ($fs->exists($graphPath)) {
+                $fs->remove($graphPath);
+
+                return new JsonResponse([
+                    'success' => 1
+                ]);
+            } else {
+                return new JsonResponse([
+                    'fileNotExists' => 1,
+                    'success' => 0
+                ]);
+            }
+        }
+    }
 };

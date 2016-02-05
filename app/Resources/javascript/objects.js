@@ -443,7 +443,7 @@ var _Connection = new function () {
             $('div#distance-box').remove();
         }
 
-        $('body').append('<div class="text-center" id="distance-box"><div>How long is this connection?</div><input type="text" /><input type="submit" value="Save" /></div>');
+        $('body').append('<div class="text-center" id="distance-box"><div>How long is this connection?</div><input type="text" /><input id="save-distance" type="submit" value="Save" /><input id="close-distance" type="submit" value="Close" /></div>');
 
         var point = _Points.getPoint(id);
         var offset = $('div#canvas-area').offset();

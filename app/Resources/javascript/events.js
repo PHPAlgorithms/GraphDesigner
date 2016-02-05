@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $(document).on('click', '#add-new', function () {
-        if ($('#popup-container').length == 0) {
+    $(document).on('click', 'button#add-new', function () {
+        if ($('div#popup-container').length == 0) {
             $.ajax({
                 url: '/create-new',
                 method: 'post',
@@ -12,22 +12,26 @@ $(document).ready(function () {
             });
         }
         return false;
-    });
-
-    $(document).on('click', '#graphs-list .list-group-item:not(.active)', function () {
-        $('#graphs-list .list-group-item.active').removeClass('active');
+    })
+    .on('click', 'div#graphs-list a.list-group-item:not(.active)', function () {
+        $('div#graphs-list a.list-group-item.active').removeClass('active');
         $(this).addClass('active');
 
-        _Stage.reload($('#graphs-list .list-group .active').text());
+        _Stage.reload($(this).text());
 
-        $('#choose-graph').css('display', 'none');
-        $('#graph-designer').css('display', 'block');
+        $('div#choose-graph').css('display', 'none');
+        $('div#graph-designer').css('display', 'block');
     })
-    .on('click', '#graphs-list .list-group-item.active', function () {
+    .on('click', 'div#graphs-list a.list-group-item.active', function () {
         $(this).removeClass('active');
 
-        $('#choose-graph').css('display', 'block');
-        $('#graph-designer').css('display', 'none');
+        $('div#choose-graph').css('display', 'block');
+        $('div#graph-designer').css('display', 'none');
+    })
+    .on('contextmenu', 'div#graphs-list a.list-group-item:not(.active)', function (event) {
+        loadContextMenu('menu-list-element', $(this).index(), { left: event.clientX, top: event.clientY });
+
+        return false; 
     });
 
     //
@@ -112,6 +116,7 @@ $(document).ready(function () {
     });
 
     //
+
     $(document).on('contextmenu', 'div#canvas-area', function () {
         _Action.toDefault();
         return false;
@@ -145,7 +150,9 @@ $(document).ready(function () {
     });
 });
 
-$(document).on('click', 'div#distance-box input[type="submit"]', function () {
+//
+
+$(document).on('click', 'div#distance-box input#save-distance', function () {
     var textval = $(this).prev('input')
          .val();
     textval = parseInt(textval);
@@ -158,5 +165,38 @@ $(document).on('click', 'div#distance-box input[type="submit"]', function () {
                .remove();
     } else {
         alert('Write a number!');
+    }
+})
+.on('click', 'div#distance-box input#close-distance', function () {
+    _Connection.clear();
+
+    $(this).parent()
+           .remove();
+});
+
+//
+
+$(document).on('click', 'ul#context-menu li', function () {
+    var elem = $(this);
+
+    switch (elem.attr('id')) {
+        case 'remove-menu-element':
+            $.ajax({
+                data: 'graphName=' + $('div#graphs-list div.list-group a:eq(' + $(this).parent().attr('data-index') + ')').text(),
+                dataType: 'json',
+                url: '/remove-graph',
+                method: 'post',
+                success: function (data) {
+                    if (data.success) {
+                        refreshList();
+                    } else {
+                        
+                    }
+
+                    elem.parent()
+                        .remove();
+                }
+            });
+            break;
     }
 });
