@@ -16,5 +16,5 @@
 /web/bundles/
 /app/Resources/saved-graphs
 /node_modules
-/web/javascript/scripts.js
-/web/css/styles.css
+!web/javascript/.gitkeep
+!web/css/.gitkeep
