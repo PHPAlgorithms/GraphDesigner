@@ -344,4 +344,17 @@ body {
             }
         }
     }
+
+    div#cursor {
+        font-size: 11px;
+        left: 0;
+        line-height: 11px;
+        position: absolute;
+        top: 0;
+
+        img {
+            height: 11px;
+            width: 11px;
+        }
+    }
 }

@@ -9,12 +9,14 @@ var _Action = new function () {
                 var body = $('body');
 
                 body.removeClass(this.current);
-                if (action != 'none') {
-                    body.addClass(action);                        
+                if (action == 'none') {
+                    _Cursor.remove();
+                } else {
+                    body.addClass(action); 
+                    _Cursor.add(action);
                 }
 
                 this.current = action;
-                console.log('Changed to ' + action);
             } else {
                 _Action.toDefault();
                 throw 'Action not exists!';
@@ -23,6 +25,7 @@ var _Action = new function () {
     };
     this.toDefault = function () {
         this.change('none');
+        _Cursor.remove();
     };
     this.currentIs = function (action) {
         return (this.current == action.toLowerCase());
@@ -571,5 +574,47 @@ var Popup = new function () {
             });
             }
         }
+    };
+};
+
+var _Cursor = new function () {
+    var isSet = false;
+
+    this.add = function (type) {
+        var cursorContent;
+
+        switch (type) {
+            case 'addpoint':
+                cursorContent = '+';
+                break;
+            case 'removepoint':
+                cursorContent = '-';
+                break;
+            case 'addconnection':
+                cursorContent = '+c';
+                break;
+            case 'removeconnection':
+                cursorContent = '-c';
+                break;
+            default:
+                throw 'Unknown cursor!';
+        }
+
+        if ($('div#cursor').length == 0) {
+            $('body').append('<div id="cursor">' + cursorContent + '</div>');
+        } else {
+            $('div#cursor').html(cursorContent);
+        }
+
+        isSet = true;
+    };
+    this.remove = function () {
+        $('div#cursor').remove();
+    };
+    this.isSet = function () {
+        return isSet;
+    };
+    this.move = function (x, y) {
+        $('div#cursor').css({ left: x + 11, top: y + 11 });
     };
 };

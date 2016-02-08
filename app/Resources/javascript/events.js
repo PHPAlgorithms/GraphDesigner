@@ -269,4 +269,12 @@ $(document).ready(function () {
         }
         return false;
     });
+
+//
+
+    $('html').on('mousemove', function (event) {
+        if (_Cursor.isSet()) {
+            _Cursor.move(event.clientX, event.clientY);
+        }
+    });
 });
