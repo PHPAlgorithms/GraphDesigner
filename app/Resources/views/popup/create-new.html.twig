@@ -1,0 +1,39 @@
+{% extends "popup/template.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <button id="popup-close" type="button" class="btn btn-default btn-xs btn-danger" aria-label="Close">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="text-center col-md-8 col-md-push-2">
+            <form id="graph-create-form">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon">
+                        Graph Name
+                    </span>
+                    <input id="graph-name" type="text" class="form-control" placeholder="Name" />
+                    <span class="input-group-btn">
+                        <button id="graph-create" type="button" class="btn btn-default btn-sm" aria-label="Create">
+                            Create
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+            <div id="form-error" class="form-alert alert alert-danger text-center col-md-6 col-md-push-3">
+                {# error container #}
+            </div>
+            <div id="form-info" class="form-alert alert alert-info text-center col-md-6 col-md-push-3">
+                {# info container #}
+            </div>
+            <div id="form-success" class="form-alert alert alert-success text-center col-md-6 col-md-push-3">
+                {# success container #}
+            </div>
+        </div>
+    </div>
+{% endblock %}
