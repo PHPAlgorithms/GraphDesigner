@@ -24,7 +24,7 @@ $(document).ready(function () {
         return false; 
     });
 
-    //
+//
 
     $(document).on('submit', 'form#graph-create-form', function () {
         $('button#graph-create').click();
@@ -105,7 +105,7 @@ $(document).ready(function () {
         return false;
     });
 
-    //
+//
 
     $(document).on('contextmenu', 'div#canvas-area', function () {
         _Action.toDefault();
@@ -138,64 +138,63 @@ $(document).ready(function () {
             }
         });
     });
-});
 
 //
 
-$(document).on('click', 'div#distance-box input#save-distance', function () {
-    var textval = $(this).prev('input')
-         .val();
-    textval = parseInt(textval);
+    $(document).on('click', 'div#distance-box input#save-distance', function () {
+        var textval = $(this).prev('input')
+             .val();
+        textval = parseInt(textval);
 
-    if ((textval % 1 === 0) && (textval > 0)) {
-        _Connection.setDistance(textval);
-        _Connections.add(_Connection);
+        if ((textval % 1 === 0) && (textval > 0)) {
+            _Connection.setDistance(textval);
+            _Connections.add(_Connection);
+
+            $(this).parent()
+                   .remove();
+        } else {
+            alert('Write a number!');
+        }
+    })
+    .on('click', 'div#distance-box input#close-distance', function () {
+        _Connection.clear();
 
         $(this).parent()
                .remove();
-    } else {
-        alert('Write a number!');
-    }
-})
-.on('click', 'div#distance-box input#close-distance', function () {
-    _Connection.clear();
-
-    $(this).parent()
-           .remove();
-});
+    });
 
 //
 
-$(document).on('click', 'ul#context-menu li', function () {
-    var elem = $(this);
+    $(document).on('click', 'ul#context-menu li', function () {
+        var elem = $(this);
 
-    switch (elem.attr('id')) {
-        case 'remove-menu-element':
-            $.ajax({
-                data: 'graphName=' + $('div#graphs-list div.list-group a:eq(' + $(this).parent().attr('data-index') + ')').text(),
-                dataType: 'json',
-                url: '/remove-graph',
-                method: 'post',
-                success: function (data) {
-                    if (data.success) {
-                        refreshList();
-                    } else {
-                        
+        switch (elem.attr('id')) {
+            case 'remove-menu-element':
+                $.ajax({
+                    data: 'graphName=' + $('div#graphs-list div.list-group a:eq(' + $(this).parent().attr('data-index') + ')').text(),
+                    dataType: 'json',
+                    url: '/remove-graph',
+                    method: 'post',
+                    success: function (data) {
+                        if (data.success) {
+                            refreshList();
+                        } else {
+                            
+                        }
+
+                        elem.parent()
+                            .remove();
                     }
+                });
+                break;
+            case 'rename-menu-element':
+                break;
+        }
+    });
 
-                    elem.parent()
-                        .remove();
-                }
-            });
-            break;
-        case 'rename-menu-element':
-            
-            break;
-    }
-});
-
-$(document).on('click, contextmenu', 'html', function (event) {
-    if (($('ul#context-menu').length > 0) && !$(event.target).is('ul#context-menu')) {
-        $('ul#context-menu').remove();
-    }
+    $('html').on('click contextmenu', function (event) {
+        if (($('ul#context-menu').length > 0) && !$(event.target).is('ul#context-menu')) {
+            $('ul#context-menu').remove();
+        }
+    });
 });
