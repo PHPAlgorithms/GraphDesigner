@@ -549,3 +549,23 @@ var _ContextMenu = new function () {
         }
     };
 };
+
+var Popup = new function () {
+    var popups = new Array('create-new', 'change-name');
+
+    this.open = function (popup) {
+        if ($('div#popup-container').length == 0) {
+            if (popups.indexOf(popup) != -1) {
+                $.ajax({
+                url: '/' + popup,
+                method: 'post',
+                success: function (data) {
+                    if ($('#popup-container').length == 0) {
+                        $('body').append(data);
+                    }
+                }
+            });
+            }
+        }
+    };
+};

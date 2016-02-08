@@ -1,16 +1,6 @@
 $(document).ready(function () {
     $(document).on('click', 'button#add-new', function () {
-        if ($('div#popup-container').length == 0) {
-            $.ajax({
-                url: '/create-new',
-                method: 'post',
-                success: function (data) {
-                    if ($('#popup-container').length == 0) {
-                        $('body').append(data);
-                    }
-                }
-            });
-        }
+        Popup.open('create-new');
         return false;
     })
     .on('click', 'div#graphs-list a.list-group-item:not(.active)', function () {
