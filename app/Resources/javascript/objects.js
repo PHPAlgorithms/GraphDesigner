@@ -521,3 +521,31 @@ var _Container = new function () {
         }
     };
 };
+
+var _ContextMenu = new function () {
+    var menus = {
+        'menu-list-element': new Array(['rename-menu-element', 'Change Name'], ['remove-menu-element', 'Remove']),
+    };
+
+    this.load = function (menu, index, offset) {
+        if ($('ul#context-menu').length > 0) {
+            $('ul#context-menu').remove();
+        }
+
+        if (menu in menus) {
+            appendedHtml = '';
+
+            $.each(menus[menu], function (key, value) {
+                appendedHtml += '<li id="' + value[0] + '">' + value[1] + '</li>';
+            });
+
+            if ((typeof offset.left != 'undefined') && (typeof offset.top != 'undefined')) {
+                $('body').append('<ul data-index="' + index + '" id="context-menu" style="left: ' + offset.left + 'px; top: ' + offset.top + 'px;">' + appendedHtml + '</ul>');
+            } else {
+                $('body').append('<ul data-index="' + index + '" id="context-menu">' + appendedHtml + '</ul>');
+            }
+        } else {
+            throw 'Unknown context menu!';
+        }
+    };
+};

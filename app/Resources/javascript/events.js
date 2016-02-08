@@ -29,7 +29,7 @@ $(document).ready(function () {
         $('div#graph-designer').css('display', 'none');
     })
     .on('contextmenu', 'div#graphs-list a.list-group-item:not(.active)', function (event) {
-        loadContextMenu('menu-list-element', $(this).index(), { left: event.clientX, top: event.clientY });
+        _ContextMenu.load('menu-list-element', $(this).index(), { left: event.clientX, top: event.clientY });
 
         return false; 
     });
@@ -198,5 +198,14 @@ $(document).on('click', 'ul#context-menu li', function () {
                 }
             });
             break;
+        case 'rename-menu-element':
+            
+            break;
+    }
+});
+
+$(document).on('click, contextmenu', 'html', function (event) {
+    if (($('ul#context-menu').length > 0) && !$(event.target).is('ul#context-menu')) {
+        $('ul#context-menu').remove();
     }
 });
