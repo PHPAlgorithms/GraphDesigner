@@ -98,11 +98,6 @@ $(document).ready(function () {
             }
         }
         return false;
-    })
-    .on('click', '#popup-container #popup-close', function () {
-        $('#popup-container').remove();
-
-        return false;
     });
 
 //
@@ -188,6 +183,9 @@ $(document).ready(function () {
                 });
                 break;
             case 'rename-menu-element':
+                Popup.open('change-name', function () {
+                    $('div#popup-container').attr('data-graph-index', elem.parent().attr('data-index'));
+                });
                 break;
         }
     });
@@ -196,5 +194,79 @@ $(document).ready(function () {
         if (($('ul#context-menu').length > 0) && !$(event.target).is('ul#context-menu')) {
             $('ul#context-menu').remove();
         }
+    });
+
+    $(document).on('submit', 'form#graph-rename-form', function () {
+        $('button#graph-rename').click();
+        return false;
+    })
+    .on('focus', 'input#graph-name', function () {
+        removeErrorClass($(this));
+        _Container.hide('error');
+    })
+    .on('change', 'input#graph-name', function () {
+        removeErrorClass($(this));
+        _Container.hide('error');
+    })
+    .on('click', 'button#graph-rename', function () {
+        _Container.hide('success');
+
+        var graphNameElement = $('#graph-name');
+        var graphName = graphNameElement.val();
+        if (graphName == '') {
+            addErrorClass(graphNameElement);
+            _Container.show('Empty graph name!', 'error');
+        } else {
+            if (/^[\w][\w\-\. ]*$/.test(graphName)) {
+                removeErrorClass(graphNameElement);
+                _Container.hide('error');
+
+                if ($('.form-alert.alert-info').css('display') == 'none') {
+                    _Container.show('Try to rename...', 'info');
+
+                    $.ajax({
+                        url: '/rename-graph',
+                        method: 'post',
+                        dataType: 'json',
+                        data: 'old-graph-name=' + $('div#graphs-list div.list-group a:eq(' + $('div#popup-container').attr('data-graph-index') + ')').text() + '&new-graph-name=' + graphName,
+                        success: function (data) {
+                            _Container.hide('info');
+
+                            if (data.success == 1) {
+                                _Container.show('Graph renamed to <em>' + graphName + '</em>!', 'success');
+                                refreshList();
+
+                                setTimeout(function () {
+                                    $('#popup-container').animate({ 'opacity': 0 }, 500, function () {
+                                        $(this).remove();
+                                    });
+                                }, 1500);
+                            } else {
+                                addErrorClass(graphNameElement);
+
+                                if (data.wrongName == 1) {
+                                    _Container.show('Wrong graph name!', 'error');
+                                } else if (data.emptyName == 1) {
+                                    _Container.show('Empty graph name!', 'error');
+                                } else if (data.graphExists == 1) {
+                                    _Container.show('Graph with this name not exists!', 'error');
+                                } else {
+                                    _Container.show('Unknown error.', 'error');
+                                }
+                            }
+                        },
+                        error: function () {
+                            _Container.hide('info');
+                            addErrorClass(graphNameElement);
+                            _Container.show('Unknown error.', 'error');
+                        }
+                    });
+                }
+            } else {
+                addErrorClass(graphNameElement);
+                _Container.show('Wrong graph name!', 'error');
+            }
+        }
+        return false;
     });
 });
